@@ -85,6 +85,9 @@ for d in fontconfig fc-case fc-lang fc-const fc-genericfamily; do PATH=$P/bin:$P
 # pthread.h first: libpthread's cancellation macros (read(), close()...) must
 # not be defined, or they break FreeType's stream->read() in ftglue.c.
 PATH=$P/bin:$PATH make -j"$JOBS" -C src CFLAGS="$CFLAGS -include pthread.h"
+# AmigaDOS names' real names (amiga/fcamiga.c), which the paths patch's fcstr.c calls: in the same library
+$CC $CFLAGS -c "$HERE/amiga/fcamiga.c" -o fcamiga.o
+$AR rs src/.libs/libfontconfig.a fcamiga.o
 cp src/.libs/libfontconfig.a "$OUT/lib/"
 mkdir -p "$OUT/include/fontconfig"
 cp fontconfig/fontconfig.h ../fontconfig/fcfreetype.h ../fontconfig/fcprivate.h "$OUT/include/fontconfig/"
