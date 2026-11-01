@@ -61,13 +61,20 @@ cd "$WORK/fontconfig/fontconfig-2.18.3"
 patch -p1 < "$HERE/patches/fontconfig-2.18.3-amiga-paths.patch"
 patch -p1 < "$HERE/patches/fontconfig-2.18.3-amiga-cache.patch"
 patch -p1 < "$HERE/patches/fontconfig-2.18.3-null-checks.patch"
+# The font cache: kept beside the program's own fontconfig folder, so it
+# outlives a restart (in T:, which is RAM, every boot scanned every font
+# again, about 25 seconds for 14 TrueType files), with T: after it for a
+# program whose folder can't be written. The built-in configuration names
+# both; fontconfig writes to the first that can be written and reads both.
+sed -i 's|<cachedir>" FC_CACHEDIR "</cachedir>"|& "  <cachedir>T:fontconfig</cachedir>"|' src/fcinit.c
+grep -q '"  <cachedir>T:fontconfig</cachedir>"' src/fcinit.c || { echo "src/fcinit.c: the built-in <cachedir> line wasn't found"; exit 2; }
 mkdir -p build && cd build
 PATH=$P/bin:$PATH ac_cv_va_copy=C99 CC=m68k-amigaos-gcc AR=m68k-amigaos-ar RANLIB=m68k-amigaos-ranlib \
     CFLAGS="$CFLAGS" CPPFLAGS="-I$DEPS/include" LDFLAGS="-L$DEPS/lib" \
     FREETYPE_CFLAGS="-I$DEPS/include/freetype2" FREETYPE_LIBS="-L$DEPS/lib -lfreetype -lpng -lz" PKG_CONFIG=/bin/false \
     ../configure --host=m68k-amigaos --build=x86_64-pc-linux-gnu --enable-static --disable-shared --disable-docs \
     --disable-nls --disable-cache-build --disable-rpath --with-arch=m68k --with-expat-includes="$DEPS/include" \
-    --with-expat-lib="$DEPS/lib" --with-default-fonts=PROGDIR:Fonts --with-cache-dir=T:fontconfig \
+    --with-expat-lib="$DEPS/lib" --with-default-fonts=PROGDIR:Fonts --with-cache-dir=PROGDIR:fontconfig/cache \
     --with-baseconfigdir=PROGDIR:fontconfig --with-configdir=PROGDIR:fontconfig/conf.d \
     --with-templatedir=PROGDIR:fontconfig/conf.avail --with-xmldir=PROGDIR:fontconfig --prefix="$OUT"
 # libnix has these functions but its headers do not declare them.
