@@ -8,7 +8,7 @@
  * that isn't mounted): fcstr.c then keeps the name as typed. The result
  * is malloc()ed, as fontconfig frees its strings with free().
  *
- * MIT, Copyright (c) 2026 AmigaChrome Team. */
+ * MIT, Copyright (c) 2026 AmiCradle Team. */
 #include <dos/dosextens.h>
 #include <proto/exec.h>
 #include <proto/dos.h>
