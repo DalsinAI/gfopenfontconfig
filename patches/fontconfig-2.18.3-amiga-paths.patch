@@ -46,16 +46,24 @@
  	    p[0] = FC_DIR_SEPARATOR;
  	    p++;
  	}
-@@ -1296,6 +1308,17 @@
+@@ -1296,6 +1308,25 @@
      FcConvertDosPath ((char *)full);
      return FcStrCanonAbsoluteFilename (full);
  #else
 +#ifdef __amigaos__
-+    /* AmigaDOS names are not POSIX paths: "/" and ".." mean other things, so
-+     * a name with a volume is kept as it is, less a trailing slash. */
++    /* AmigaDOS names are not POSIX paths: "/" and ".." mean other things.
++     * A name with a volume or assign becomes the real name of what it names
++     * (openamigafontconfig's amiga/fcamiga.c: Lock and NameFromLock), so two
++     * programs' "PROGDIR:Fonts" are two folders with two cache keys. A name
++     * that can't be locked is kept as it is, less a trailing slash. */
 +    if (strchr ((const char *)s, ':')) {
-+	FcChar8 *file = FcStrCopy (s);
-+	size_t   len = file ? strlen ((const char *)file) : 0;
++	extern FcChar8 *FcAmigaRealName (const FcChar8 *name);
++	FcChar8 *file = FcAmigaRealName (s);
++	size_t   len;
++	if (file)
++	    return file;
++	file = FcStrCopy (s);
++	len = file ? strlen ((const char *)file) : 0;
 +	if (len > 1 && file[len - 1] == '/' && file[len - 2] != ':')
 +	    file[len - 1] = '\0';
 +	return file;
