@@ -1,8 +1,8 @@
 # openamigafontconfig
 
 Fontconfig for AmigaOS 3.x on 68k, built as static link libraries for
-GCC programs. Part of the [OpenAmiga](https://github.com/DalsinAI/openamiga)
-ports, made for [OpenBrowser](https://github.com/DalsinAI/openamigabrowser),
+GCC programs. Part of the [GFOpenAmiga](https://github.com/DalsinAI/openamiga)
+ports, made for [GFOpenBrowser](https://github.com/DalsinAI/openamigabrowser),
 the WebKit browser for AmigaOS 3.2.
 
 **Status:** Working: builds, and the smoke test indexes and matches fonts on the bench.
@@ -47,7 +47,7 @@ Link with: `-lfontconfig -lfreetype -lexpat -lpng -lz -lpthread -lm`
 
 ## Tested
 
-`tests/fctest.c`, run on AmigaOS 3.2.3 on AmigaChrome's AC090 emulation (68040 with FPU, 256 MB), Instance-24, 4 October 2026, as `fctest DH1:OBFonts`:
+`tests/fctest.c`, run on AmigaOS 3.2.3 on AmiCradle's AC090 emulation (68040 with FPU, 256 MB), Instance-24, 4 October 2026, as `fctest DH1:OBFonts`:
 
 ```
 FONTCONFIG 21803 add_dir=1
@@ -64,7 +64,7 @@ It has not yet been run on real Amiga hardware.
 
 ## Known issues
 
-- No `fonts.conf` is shipped here. A program that ships its own (`PROGDIR:fontconfig/fonts.conf`) names its cache there, and should name a folder that outlives a restart first and `T:fontconfig` after it, as the built-in configuration does: `<cachedir>PROGDIR:fontconfig/cache</cachedir>` then `<cachedir>T:fontconfig</cachedir>`. With only `T:fontconfig` it scans every font again after each boot. (OpenBrowser shipped one with only `T:fontconfig` until its text moved to OpenFont on 23 October 2026.) Programs can also add font folders with `FcConfigAppFontAddDir()`.
+- No `fonts.conf` is shipped here. A program that ships its own (`PROGDIR:fontconfig/fonts.conf`) names its cache there, and should name a folder that outlives a restart first and `T:fontconfig` after it, as the built-in configuration does: `<cachedir>PROGDIR:fontconfig/cache</cachedir>` then `<cachedir>T:fontconfig</cachedir>`. With only `T:fontconfig` it scans every font again after each boot. (GFOpenBrowser shipped one with only `T:fontconfig` until its text moved to GFOpenFont on 23 October 2026.) Programs can also add font folders with `FcConfigAppFontAddDir()`.
 
 ## Licence
 
