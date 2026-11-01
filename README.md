@@ -8,7 +8,8 @@ the WebKit browser for AmigaOS 3.2.
 **Status:** Working: builds, and the smoke test indexes and matches fonts on the bench.
 
 This repository holds the Amiga build, not Fontconfig itself: a build script,
-patches, a smoke test and the upstream licences.
+patches, a small AmigaDOS helper (`amiga/`), a smoke test and the upstream
+licences.
 
 ## Upstream
 
@@ -21,8 +22,9 @@ for the library goes to its authors; see `upstream/` for their notices.
 
 ## What the Amiga port changes
 
-- **AmigaDOS names** (`patches/fontconfig-2.18.3-amiga-paths.patch`, in `src/fcstr.c` and `src/fccfg.c`): a name with a volume or assign (`PROGDIR:Fonts`, `DH1:Fonts`) is absolute; joining `PROGDIR:` and `Fonts` gives `PROGDIR:Fonts` with no slash, since a slash after the colon would mean the parent directory; such names are not rewritten as POSIX paths; and a configuration file named with a volume (`PROGDIR:fontconfig/fonts.conf`) is opened as it is, not as `/PROGDIR:...`, which made AmigaDOS ask for a disk called `/PROGDIR`.
+- **AmigaDOS names** (`patches/fontconfig-2.18.3-amiga-paths.patch`, in `src/fcstr.c` and `src/fccfg.c`): a name with a volume or assign (`PROGDIR:Fonts`, `DH1:Fonts`) is absolute; joining `PROGDIR:` and `Fonts` gives `PROGDIR:Fonts` with no slash, since a slash after the colon would mean the parent directory; such names are not rewritten as POSIX paths, but made the real name of what they name with `Lock()` and `NameFromLock()` (`amiga/fcamiga.c`, built into the same library), so that each program's `PROGDIR:Fonts` is its own folder with its own cache key, and an assign resolves the same way (a name that can't be locked is kept as typed); and a configuration file named with a volume (`PROGDIR:fontconfig/fonts.conf`) is opened as it is, not as `/PROGDIR:...`, which made AmigaDOS ask for a disk called `/PROGDIR`.
 - **The font cache** (`patches/fontconfig-2.18.3-amiga-cache.patch`, in `src/fccompat.c` and `src/fcatomic.c`): without it the cache was never saved, so every program start scanned all its fonts again (about 25 seconds for 14 TrueType files on the test instance). libnix's `fcntl()` does not do `F_DUPFD_CLOEXEC`, which made the temporary file fail; the cache is locked with a directory, as libnix has no hard links; and the old cache file is deleted before the new one is renamed over it, which AmigaDOS refuses.
+- **Where the cache is** (`build.sh`): `PROGDIR:fontconfig/cache`, beside the program's own `fontconfig` folder, so it outlives a restart. It used to be `T:fontconfig`, in RAM, so every boot scanned every font again. The built-in configuration also names `T:fontconfig` after it, for a program whose folder can't be written: fontconfig writes the cache to the first folder it can write and reads from both.
 - **Null checks** (`patches/fontconfig-2.18.3-null-checks.patch`, in `src/fcinit.c` and `src/fcxml.c`): when the configuration fails and the built-in fallback cannot be made either (out of memory), `FcInitLoadOwnConfig` returns NULL instead of writing through a NULL fallback; and an `<alias>` whose test rule cannot be allocated reports "out of memory" instead of writing through a NULL rule. On an Amiga address 0 is memory, so such writes would corrupt it; GCC put `TRAP #7` there (Software Failure 80000027). The build also passes `-fno-delete-null-pointer-checks`.
 - **libnix gaps:** `getprogname`, `vasprintf` and `mkostemp` are not declared, so the script turns them off in `config.h` and uses `vsnprintf`.
 - **libpthread's macros:** `pthread.h` is included first, so its cancellation-point macros don't break FreeType's `stream->read`.
@@ -62,12 +64,12 @@ It has not yet been run on real Amiga hardware.
 
 ## Known issues
 
-- No `fonts.conf` is shipped here; GFOpenBrowser ships its own (`PROGDIR:fontconfig/fonts.conf`, with its cache in `T:fontconfig`), and it works on the bench. Programs can also add font folders with `FcConfigAppFontAddDir()`.
+- No `fonts.conf` is shipped here. A program that ships its own (`PROGDIR:fontconfig/fonts.conf`) names its cache there, and should name a folder that outlives a restart first and `T:fontconfig` after it, as the built-in configuration does: `<cachedir>PROGDIR:fontconfig/cache</cachedir>` then `<cachedir>T:fontconfig</cachedir>`. With only `T:fontconfig` it scans every font again after each boot. (GFOpenBrowser shipped one with only `T:fontconfig` until its text moved to GFOpenFont on 23 October 2026.) Programs can also add font folders with `FcConfigAppFontAddDir()`.
 
 ## Licence
 
-AmigaChrome Team's Amiga changes (the build script, patches, configuration
-headers and tests) are MIT, Copyright (c) 2026 AmigaChrome Team: see
+AmigaChrome Team's Amiga changes (the build script, patches, `amiga/`,
+configuration headers and tests) are MIT, Copyright (c) 2026 AmigaChrome Team: see
 [LICENSE](LICENSE). Fontconfig keeps its own licence, in
 [upstream/](upstream/); a patch to its source stays under that licence.
 
