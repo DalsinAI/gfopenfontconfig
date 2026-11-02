@@ -1,4 +1,4 @@
-/* openamigafontconfig smoke test: index a font folder, list and match fonts. */
+/* gfopenfontconfig smoke test: index a font folder, list and match fonts. */
 #include <stdio.h>
 #include <fontconfig/fontconfig.h>
 static void match(FcConfig *cfg, const char *pattern)

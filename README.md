@@ -1,8 +1,8 @@
-# openamigafontconfig
+# gfopenfontconfig
 
 Fontconfig for AmigaOS 3.x on 68k, built as static link libraries for
-GCC programs. Part of the [GFOpenAmiga](https://github.com/DalsinAI/openamiga)
-ports, made for [GFOpenBrowser](https://github.com/DalsinAI/openamigabrowser),
+GCC programs. Part of the [GFOpenAmiga](https://github.com/DalsinAI/gfopenamiga)
+ports, made for [GFOpenBrowser](https://github.com/DalsinAI/gfopenbrowser),
 the WebKit browser for AmigaOS 3.2.
 
 **Status:** Working: builds, and the smoke test indexes and matches fonts on the bench.
@@ -32,7 +32,7 @@ for the library goes to its authors; see `upstream/` for their notices.
 ## Building
 
 You need the os32-gcc16 compiler (bebbo's amiga-gcc on GCC 16.2 with libnix
-and libpthread; see DalsinAI/openamigabrowser `stove/`) and the upstream
+and libpthread; see DalsinAI/gfopenbrowser `stove/`) and the upstream
 tarballs from [SOURCES](SOURCES) in `tarballs/`. Then:
 
 ```
@@ -75,4 +75,4 @@ configuration headers and tests) are MIT, Copyright (c) 2026 AmiCradle Team: see
 
 ## Contributors
 
-openamigafontconfig is created and maintained by [SacredTrees](https://github.com/SacredTrees) with The AmiCradle Team, copyright AmiCradle Team. Everyone whose work it includes is credited in [`CONTRIBUTORS.md`](CONTRIBUTORS.md).
+gfopenfontconfig is created and maintained by [SacredTrees](https://github.com/SacredTrees) with The AmiCradle Team, copyright AmiCradle Team. Everyone whose work it includes is credited in [`CONTRIBUTORS.md`](CONTRIBUTORS.md).
