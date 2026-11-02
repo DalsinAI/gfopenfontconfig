@@ -2,7 +2,7 @@
 
 ## Creator and maintainer
 
-- **SacredTrees** ([@SacredTrees](https://github.com/SacredTrees)): created openamigafontconfig, the Amiga build of Fontconfig, designs it and maintains it.
+- **SacredTrees** ([@SacredTrees](https://github.com/SacredTrees)): created gfopenfontconfig, the Amiga build of Fontconfig, designs it and maintains it.
 
 ## The AmiCradle team
 

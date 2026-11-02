@@ -1,4 +1,4 @@
-/* openamigafontconfig: the real name of an AmigaDOS name, for fcstr.c's
+/* gfopenfontconfig: the real name of an AmigaDOS name, for fcstr.c's
  * FcStrCanonFilename (patches/fontconfig-2.18.3-amiga-paths.patch).
  *
  * "PROGDIR:Fonts" is each program's own drawer, so kept as typed it gave

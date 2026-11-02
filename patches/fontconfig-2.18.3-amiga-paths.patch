@@ -53,7 +53,7 @@
 +#ifdef __amigaos__
 +    /* AmigaDOS names are not POSIX paths: "/" and ".." mean other things.
 +     * A name with a volume or assign becomes the real name of what it names
-+     * (openamigafontconfig's amiga/fcamiga.c: Lock and NameFromLock), so two
++     * (gfopenfontconfig's amiga/fcamiga.c: Lock and NameFromLock), so two
 +     * programs' "PROGDIR:Fonts" are two folders with two cache keys. A name
 +     * that can't be locked is kept as it is, less a trailing slash. */
 +    if (strchr ((const char *)s, ':')) {
